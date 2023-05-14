@@ -1,7 +1,8 @@
 <template>
-	<section v-if="user.data && user.description" class="pt-4">
+	<section v-if="user.data && user.description" class=" pt-4">
 		<div class="w-full lg:w-4/12 px-4 mx-auto">
-			<div class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb shadow-xl rounded-lg">
+			<div
+				class="relative flex flex-col min-w-0 break-words bg-gray-200 w-full mb shadow-xl rounded-lg">
 				<div class="flex flex-wrap px-6 justify-center">
 					<div class="w-full px-4 flex justify-center">
 						<div v-if="user" class="relative">
@@ -10,23 +11,35 @@
 								alt="user photo"
 								:src="user.images[1].download_url"
 								class="mt-10" />
-							<img v-else alt="user photo" src="https://random.imagecdn.app/500/250" class="mt-10" />
+							<img
+								v-else
+								alt="user photo"
+								src="https://random.imagecdn.app/500/250"
+								class="mt-10" />
 						</div>
 					</div>
 				</div>
 				<div class="text-center mt-5">
-					<h3 class="text-2xl font-semibold leading-normal text-blueGray-700 mb-2">{{ user.data.name }}</h3>
+					<h3
+						class="text-2xl font-semibold leading-normal text-blueGray-700 mb-2">
+						{{ user.data.name }}
+					</h3>
 					<p class="font-semibold">
-						Płeć : <span v-if="user.data.gender === 'male'"> Mężczyzna </span> <span v-else>Kobieta</span>
+						Płeć : <span v-if="user.data.gender === 'male'"> Mężczyzna </span>
+						<span v-else>Kobieta</span>
 					</p>
-					<a href="mailto: weqwqwe@gmail.com" class="text-sm transition-colors hover:text-blue-400 font-semibold">
+					<a
+						href="mailto: weqwqwe@gmail.com"
+						class="text-sm transition-colors hover:text-blue-400 font-semibold">
 						Kontakt : {{ user.data.email }}
 					</a>
 				</div>
 				<div class="pt-5 border-gray-200">
 					<div class="flex justify-center">
 						<div class="w-full px-4">
-							<label for="description" class="mb-3 text-lg font-semibold block">Opis użytkownika:</label>
+							<label for="description" class="mb-3 text-lg font-semibold block"
+								>Opis użytkownika:</label
+							>
 							<p class="mb-4" id="tag">{{ user.description.body }}</p>
 							<textarea
 								id="editcontent2"
@@ -52,8 +65,8 @@
 			</div>
 		</div>
 	</section>
-	<section v-else>
-		<div class="text-center">
+	<section v-else class="flex justify-center items-center h-screen">
+		<div class="text-center flex justify-center items-center ">
 			<div role="status">
 				<svg
 					aria-hidden="true"
@@ -74,51 +87,53 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import axios from 'axios'
-const route = useRoute()
+import { reactive, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+const route = useRoute();
 const user = reactive({
 	data: [],
 	images: [],
 	description: '',
 	buttonText: 'Edytuj',
 	originalContent: '',
-})
+});
 onMounted(() => {
-	const id = route.params.id
-	axios.get(`https://gorest.co.in/public/v2/users/${id}`).then(async response => {
-		user.data = response.data
+	const id = route.params.id;
+	axios
+		.get(`https://gorest.co.in/public/v2/users/${id}`)
+		.then(async (response) => {
+			user.data = response.data;
 
-		await axios.get(`https://picsum.photos/v2/list`).then(res => {
-			user.images = res.data
-		})
-	})
-	axios.get(`https://gorest.co.in/public/v2/posts`).then(r => {
-		user.description = r.data[0]
-	})
-})
+			await axios.get(`https://picsum.photos/v2/list`).then((res) => {
+				user.images = res.data;
+			});
+		});
+	axios.get(`https://gorest.co.in/public/v2/posts`).then((r) => {
+		user.description = r.data[0];
+	});
+});
 function editOrSave() {
-	const btn = user.buttonText
+	const btn = user.buttonText;
 	if (btn === 'Edytuj') {
-		user.originalContent = user.description.body
-		user.buttonText = 'Zapisz'
-		document.getElementById('tag').style.display = 'none'
-		document.getElementById('editcontent2').style.display = 'block'
-		document.getElementById('cancel').style.display = 'block'
+		user.originalContent = user.description.body;
+		user.buttonText = 'Zapisz';
+		document.getElementById('tag').style.display = 'none';
+		document.getElementById('editcontent2').style.display = 'block';
+		document.getElementById('cancel').style.display = 'block';
 	} else {
-		document.getElementById('tag').textContent = user.description.body
-		document.getElementById('editcontent2').style.display = 'none'
-		document.getElementById('tag').style.display = 'block'
-		document.getElementById('cancel').style.display = 'none'
-		user.buttonText = 'Edytuj'
+		document.getElementById('tag').textContent = user.description.body;
+		document.getElementById('editcontent2').style.display = 'none';
+		document.getElementById('tag').style.display = 'block';
+		document.getElementById('cancel').style.display = 'none';
+		user.buttonText = 'Edytuj';
 	}
 }
 function cancel() {
-	user.description.body = user.originalContent
-	document.getElementById('editcontent2').style.display = 'none'
-	document.getElementById('tag').style.display = 'block'
-	document.getElementById('cancel').style.display = 'none'
-	user.buttonText = 'Edytuj'
+	user.description.body = user.originalContent;
+	document.getElementById('editcontent2').style.display = 'none';
+	document.getElementById('tag').style.display = 'block';
+	document.getElementById('cancel').style.display = 'none';
+	user.buttonText = 'Edytuj';
 }
 </script>
